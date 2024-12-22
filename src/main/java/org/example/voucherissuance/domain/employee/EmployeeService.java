@@ -1,14 +1,9 @@
 package org.example.voucherissuance.domain.employee;
 
-import org.example.voucherissuance.controller.request.EmployeeCreateRequest;
 import org.example.voucherissuance.controller.response.EmployeeResponse;
-import org.example.voucherissuance.entity.EmployeeEntity;
-import org.example.voucherissuance.repository.EmployeeRepository;
+import org.example.voucherissuance.entity.employee.EmployeeEntity;
+import org.example.voucherissuance.entity.employee.EmployeeRepository;
 import org.springframework.stereotype.Service;
-
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
 
 @Service
 public class EmployeeService {
@@ -31,7 +26,8 @@ public class EmployeeService {
         EmployeeEntity employeeEntity = employeeRepository.findById(no)
                 .orElseThrow(() -> new IllegalArgumentException("존제하지 않는 회원입니다."));
 
-        return new EmployeeResponse(employeeEntity.getId(), employeeEntity.getName(), employeeEntity.getPosition(), employeeEntity.getDepartment());
+        return new EmployeeResponse(employeeEntity.getId(), employeeEntity.getName(), employeeEntity.getPosition(), employeeEntity.getDepartment(),
+                employeeEntity.getCreateAt(), employeeEntity.getUpdateAt());
     }
 
 }

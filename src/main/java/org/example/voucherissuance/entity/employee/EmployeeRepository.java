@@ -1,6 +1,6 @@
-package org.example.voucherissuance.repository;
+package org.example.voucherissuance.entity.employee;
 
-import org.example.voucherissuance.entity.EmployeeEntity;
+import org.example.voucherissuance.entity.employee.EmployeeEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

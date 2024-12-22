@@ -1,14 +1,12 @@
-package org.example.voucherissuance.entity;
+package org.example.voucherissuance.entity.employee;
 
 import jakarta.persistence.*;
+import org.example.voucherissuance.entity.BaseEntity;
 
 @Table(name = "employee")
 @Entity
-public class EmployeeEntity {
+public class EmployeeEntity extends BaseEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
     private String name;
     private String position;
     private String department;
@@ -20,10 +18,6 @@ public class EmployeeEntity {
         this.name = name;
         this.position = position;
         this.department = department;
-    }
-
-    public Long getId() {
-        return id;
     }
 
     public String getName() {
