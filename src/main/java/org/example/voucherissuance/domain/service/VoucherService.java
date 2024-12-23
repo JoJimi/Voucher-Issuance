@@ -27,10 +27,14 @@ public class VoucherService {
         return voucherRepository.save(voucherEntity).getCode();
     }
 
-    // 상품권 취소
-    public Long cancelVoucher(Long id) {
-        voucherRepository.deleteById(id);
-        return id;
+    // 상품권 사용불가
+    @Transactional
+    public void disableVoucher(String code) {
+        final VoucherEntity voucherEntity = voucherRepository.findByCode(code)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 상품권입니다."));
+
+        voucherEntity.disable();
+
     }
 
     // 상품권 사용

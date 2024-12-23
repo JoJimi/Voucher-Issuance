@@ -6,7 +6,6 @@ import org.example.voucherissuance.common.type.VoucherStatusType;
 import org.example.voucherissuance.entity.BaseEntity;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 @Table(name="voucher")
 @Entity
@@ -46,5 +45,9 @@ public class VoucherEntity extends BaseEntity {
 
     public Long getAmount() {
         return amount;
+    }
+
+    public void disable() {
+        this.status = VoucherStatusType.DISABLE;
     }
 }
