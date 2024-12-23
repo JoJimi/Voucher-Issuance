@@ -1,7 +1,10 @@
 package org.example.voucherissuance.entity.voucher;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.Table;
+import org.example.voucherissuance.common.type.VoucherAmountType;
 import org.example.voucherissuance.common.type.VoucherStatusType;
 import org.example.voucherissuance.entity.BaseEntity;
 
@@ -15,11 +18,12 @@ public class VoucherEntity extends BaseEntity {
     private VoucherStatusType status;       // 상품권 상태
     private LocalDate validFrom;            // 상품권 유효기간 시작일
     private LocalDate validTo;              // 상품권 유효기간 종료일
-    private Long amount;                    // 상품권 금액
+    @Enumerated(EnumType.STRING)
+    private VoucherAmountType amount;       // 상품권 금액
 
     public VoucherEntity() {
     }
-    public VoucherEntity(String code, VoucherStatusType status, LocalDate validFrom, LocalDate validTo, Long amount) {
+    public VoucherEntity(String code, VoucherStatusType status, LocalDate validFrom, LocalDate validTo, VoucherAmountType amount) {
         this.code = code;
         this.status = status;
         this.validFrom = validFrom;
@@ -43,7 +47,7 @@ public class VoucherEntity extends BaseEntity {
         return validTo;
     }
 
-    public Long getAmount() {
+    public VoucherAmountType getAmount() {
         return amount;
     }
 

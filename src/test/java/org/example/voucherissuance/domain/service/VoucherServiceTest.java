@@ -1,5 +1,6 @@
 package org.example.voucherissuance.domain.service;
 
+import org.example.voucherissuance.common.type.VoucherAmountType;
 import org.example.voucherissuance.common.type.VoucherStatusType;
 import org.example.voucherissuance.entity.voucher.VoucherEntity;
 import org.example.voucherissuance.entity.voucher.VoucherRepository;
@@ -28,7 +29,7 @@ class VoucherServiceTest {
         // given
         final LocalDate validFrom = LocalDate.now();
         final LocalDate validTo = LocalDate.now().plusDays(30);
-        final Long amount = 10000L;
+        final VoucherAmountType amount = VoucherAmountType.KRW_30000;
 
         final String code = voucherService.publish(validFrom, validTo, amount);
 
@@ -49,7 +50,7 @@ class VoucherServiceTest {
         // given
         final LocalDate validFrom = LocalDate.now();
         final LocalDate validTo = LocalDate.now().plusDays(30);
-        final Long amount = 10000L;
+        final VoucherAmountType amount = VoucherAmountType.KRW_30000;
 
         final String code = voucherService.publish(validFrom, validTo, amount);
 
@@ -72,7 +73,7 @@ class VoucherServiceTest {
         // given
         final LocalDate validFrom = LocalDate.now();
         final LocalDate validTo = LocalDate.now().plusDays(30);
-        final Long amount = 10000L;
+        final VoucherAmountType amount = VoucherAmountType.KRW_30000;
 
         final String code = voucherService.publish(validFrom, validTo, amount);
 

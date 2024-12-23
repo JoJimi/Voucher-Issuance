@@ -1,5 +1,6 @@
 package org.example.voucherissuance.domain.service;
 
+import org.example.voucherissuance.common.type.VoucherAmountType;
 import org.example.voucherissuance.common.type.VoucherStatusType;
 import org.example.voucherissuance.entity.voucher.VoucherEntity;
 import org.example.voucherissuance.entity.voucher.VoucherRepository;
@@ -36,7 +37,7 @@ public class VoucherServiceDynamicTest {
                     //given
                     final LocalDate validFrom = LocalDate.now();
                     final LocalDate validTo = LocalDate.now().plusDays(30);
-                    final Long amount = 10000L;
+                    final VoucherAmountType amount = VoucherAmountType.KRW_30000;
 
                     //when
                     final String code = voucherService.publish(validFrom, validTo, amount);
@@ -75,7 +76,7 @@ public class VoucherServiceDynamicTest {
                 dynamicTest("[1] 상품권을 사용합니다.", ()->{
                     final LocalDate validFrom = LocalDate.now();
                     final LocalDate validTo = LocalDate.now().plusDays(30);
-                    final Long amount = 10000L;
+                    final VoucherAmountType amount = VoucherAmountType.KRW_30000;
 
                     final String code = voucherService.publish(validFrom, validTo, amount);
                     codes.add(code);
