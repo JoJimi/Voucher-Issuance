@@ -14,7 +14,8 @@ import java.time.LocalDate;
 @Entity
 public class VoucherEntity extends BaseEntity {
 
-    private String code;                    // 상품권 코드
+    private String code;
+    @Enumerated(EnumType.STRING)// 상품권 코드
     private VoucherStatusType status;       // 상품권 상태
     private LocalDate validFrom;            // 상품권 유효기간 시작일
     private LocalDate validTo;              // 상품권 유효기간 종료일
