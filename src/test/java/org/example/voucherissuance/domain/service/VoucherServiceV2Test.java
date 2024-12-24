@@ -1,5 +1,7 @@
 package org.example.voucherissuance.domain.service;
 
+import org.example.voucherissuance.common.dto.RequestContext;
+import org.example.voucherissuance.common.type.RequesterType;
 import org.example.voucherissuance.common.type.VoucherAmountType;
 import org.example.voucherissuance.common.type.VoucherStatusType;
 import org.example.voucherissuance.entity.voucher.VoucherEntity;
@@ -10,11 +12,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.time.LocalDate;
+import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
-class VoucherServiceTest {
+class VoucherServiceV2Test {
     @Autowired
     private VoucherService voucherService;
 
@@ -25,11 +28,12 @@ class VoucherServiceTest {
     @Test
     public void 상품권_발행(){
         // given
+        final RequestContext requestContext = new RequestContext(RequesterType.PARTNER, UUID.randomUUID().toString());
         final LocalDate validFrom = LocalDate.now();
         final LocalDate validTo = LocalDate.now().plusDays(30);
         final VoucherAmountType amount = VoucherAmountType.KRW_30000;
 
-        final String code = voucherService.publishV2(validFrom, validTo, amount);
+        final String code = voucherService.publishV2(requestContext, validFrom, validTo, amount);
 
         // when
         final VoucherEntity voucherEntity = voucherRepository.findByCode(code).get();
@@ -46,11 +50,12 @@ class VoucherServiceTest {
     @Test
     public void 상품권_사용불가(){
         // given
+        final RequestContext requestContext = new RequestContext(RequesterType.PARTNER, UUID.randomUUID().toString());
         final LocalDate validFrom = LocalDate.now();
         final LocalDate validTo = LocalDate.now().plusDays(30);
         final VoucherAmountType amount = VoucherAmountType.KRW_30000;
 
-        final String code = voucherService.publishV2(validFrom, validTo, amount);
+        final String code = voucherService.publishV2(requestContext, validFrom, validTo, amount);
 
         // when
         voucherService.disableVoucherV2(code);
@@ -69,11 +74,12 @@ class VoucherServiceTest {
     @Test
     public void 상품권_사용(){
         // given
+        final RequestContext requestContext = new RequestContext(RequesterType.PARTNER, UUID.randomUUID().toString());
         final LocalDate validFrom = LocalDate.now();
         final LocalDate validTo = LocalDate.now().plusDays(30);
         final VoucherAmountType amount = VoucherAmountType.KRW_30000;
 
-        final String code = voucherService.publishV2(validFrom, validTo, amount);
+        final String code = voucherService.publishV2(requestContext, validFrom, validTo, amount);
 
         // when
         voucherService.useVoucherV2(code);
