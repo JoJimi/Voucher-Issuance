@@ -1,13 +1,12 @@
 package org.example.voucherissuance.domain.employee;
 
-import org.example.voucherissuance.controller.response.EmployeeResponse;
+import org.example.voucherissuance.controller.employee.response.EmployeeResponse;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 public class EmployeeServiceTest {

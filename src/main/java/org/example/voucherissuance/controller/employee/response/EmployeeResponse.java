@@ -1,4 +1,4 @@
-package org.example.voucherissuance.controller.response;
+package org.example.voucherissuance.controller.employee.response;
 
 import java.time.LocalDateTime;
 

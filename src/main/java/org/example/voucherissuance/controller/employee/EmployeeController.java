@@ -1,7 +1,7 @@
-package org.example.voucherissuance.controller;
+package org.example.voucherissuance.controller.employee;
 
-import org.example.voucherissuance.controller.request.EmployeeCreateRequest;
-import org.example.voucherissuance.controller.response.EmployeeResponse;
+import org.example.voucherissuance.controller.employee.request.EmployeeCreateRequest;
+import org.example.voucherissuance.controller.employee.response.EmployeeResponse;
 import org.example.voucherissuance.domain.employee.EmployeeService;
 import org.springframework.web.bind.annotation.*;
 

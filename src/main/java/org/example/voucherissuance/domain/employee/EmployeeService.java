@@ -1,6 +1,6 @@
 package org.example.voucherissuance.domain.employee;
 
-import org.example.voucherissuance.controller.response.EmployeeResponse;
+import org.example.voucherissuance.controller.employee.response.EmployeeResponse;
 import org.example.voucherissuance.entity.employee.EmployeeEntity;
 import org.example.voucherissuance.entity.employee.EmployeeRepository;
 import org.springframework.stereotype.Service;
