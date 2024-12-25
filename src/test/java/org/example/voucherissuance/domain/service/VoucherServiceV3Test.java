@@ -4,9 +4,7 @@ import org.example.voucherissuance.common.dto.RequestContext;
 import org.example.voucherissuance.common.type.RequesterType;
 import org.example.voucherissuance.common.type.VoucherAmountType;
 import org.example.voucherissuance.common.type.VoucherStatusType;
-import org.example.voucherissuance.entity.voucher.VoucherEntity;
-import org.example.voucherissuance.entity.voucher.VoucherHistoryEntity;
-import org.example.voucherissuance.entity.voucher.VoucherRepository;
+import org.example.voucherissuance.entity.voucher.*;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,32 +16,39 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
-class VoucherServiceV2Test {
+class VoucherServiceV3Test {
     @Autowired
     private VoucherService voucherService;
 
     @Autowired
     private VoucherRepository voucherRepository;
 
-    @DisplayName("발행된 상품권은 code로 조회할 수 있어야 한다.")
+
+    @Autowired
+    private ContractRepository contractRepository;
+
+    @DisplayName("발행한 상품권은 계약정보의 voucherValidPeriodDayCount 만큼 유효기간을 가져야 된다.")
     @Test
-    public void 상품권_발행(){
+    public void test1(){
         // given
         final RequestContext requestContext = new RequestContext(RequesterType.PARTNER, UUID.randomUUID().toString());
         final LocalDate validFrom = LocalDate.now();
         final LocalDate validTo = LocalDate.now().plusDays(30);
         final VoucherAmountType amount = VoucherAmountType.KRW_30000;
 
-        final String code = voucherService.publishV2(requestContext, validFrom, validTo, amount);
+        final String contractCode = "CT001";
 
         // when
+        final String code = voucherService.publishV2(requestContext, validFrom, validTo, amount);
         final VoucherEntity voucherEntity = voucherRepository.findByCode(code).get();
 
         // then
+        final ContractEntity contractEntity = contractRepository.findByCode(contractCode).get();
+
         assertThat(voucherEntity.getCode()).isEqualTo(code);
         assertThat(voucherEntity.getStatus()).isEqualTo(VoucherStatusType.PUBLISH);
-        assertThat(voucherEntity.getValidFrom()).isEqualTo(validFrom);
-        assertThat(voucherEntity.getValidTo()).isEqualTo(validTo);
+        assertThat(voucherEntity.getValidFrom()).isEqualTo(LocalDate.now());
+        assertThat(voucherEntity.getValidTo()).isEqualTo(LocalDate.now().plusDays(contractEntity.getVoucherValidPeriodDayCount()));
         assertThat(voucherEntity.getAmount()).isEqualTo(amount);
 
         // history
@@ -58,7 +63,7 @@ class VoucherServiceV2Test {
 
     @DisplayName("발행된 상품권은 사용 불가 처리할 수 있다.")
     @Test
-    public void 상품권_사용불가(){
+    public void test2(){
         // given
         final RequestContext requestContext = new RequestContext(RequesterType.PARTNER, UUID.randomUUID().toString());
         final LocalDate validFrom = LocalDate.now();
@@ -93,7 +98,7 @@ class VoucherServiceV2Test {
 
     @DisplayName("발행된 상품권은 사용할 수 있다.")
     @Test
-    public void 상품권_사용(){
+    public void test3(){
         // given
         final RequestContext requestContext = new RequestContext(RequesterType.PARTNER, UUID.randomUUID().toString());
         final LocalDate validFrom = LocalDate.now();

@@ -48,7 +48,7 @@ public class VoucherController {
     // 상품권 발행
     @PostMapping("/api/v2/voucher")
     public VoucherPublishV2Response publishV2(@RequestBody final VoucherPublishV2Request request) {
-        final String publishedVoucherCode = voucherService.publishV1(new RequestContext(request.requesterType(), request.requesterId()),
+        final String publishedVoucherCode = voucherService.publishV2(new RequestContext(request.requesterType(), request.requesterId()),
                 LocalDate.now(), LocalDate.now().plusDays(1830L), request.amountType());
         final String orderId = UUID.randomUUID().toString().toUpperCase().replaceAll("-", "");
 
