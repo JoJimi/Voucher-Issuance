@@ -70,7 +70,7 @@ class VoucherServiceV2Test {
         final RequestContext disableRequestContext = new RequestContext(RequesterType.PARTNER, UUID.randomUUID().toString());
 
         // when
-        voucherService.disableVoucherV2(requestContext, code);
+        voucherService.disableVoucherV2(disableRequestContext, code);
         final VoucherEntity voucherEntity = voucherRepository.findByCode(code).get();
 
         // then
@@ -105,7 +105,7 @@ class VoucherServiceV2Test {
         final RequestContext useRequestContext = new RequestContext(RequesterType.PARTNER, UUID.randomUUID().toString());
 
         // when
-        voucherService.useVoucherV1(requestContext, code);
+        voucherService.useVoucherV1(useRequestContext, code);
         final VoucherEntity voucherEntity = voucherRepository.findByCode(code).get();
 
         // then
