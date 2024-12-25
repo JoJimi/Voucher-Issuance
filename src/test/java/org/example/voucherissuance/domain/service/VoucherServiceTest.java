@@ -29,7 +29,7 @@ class VoucherServiceTest {
         final LocalDate validTo = LocalDate.now().plusDays(30);
         final VoucherAmountType amount = VoucherAmountType.KRW_30000;
 
-        final String code = voucherService.publishV2(validFrom, validTo, amount);
+        final String code = voucherService.publishV1(validFrom, validTo, amount);
 
         // when
         final VoucherEntity voucherEntity = voucherRepository.findByCode(code).get();
@@ -50,10 +50,10 @@ class VoucherServiceTest {
         final LocalDate validTo = LocalDate.now().plusDays(30);
         final VoucherAmountType amount = VoucherAmountType.KRW_30000;
 
-        final String code = voucherService.publishV2(validFrom, validTo, amount);
+        final String code = voucherService.publishV1(validFrom, validTo, amount);
 
         // when
-        voucherService.disableVoucherV2(code);
+        voucherService.disableVoucherV1(code);
         final VoucherEntity voucherEntity = voucherRepository.findByCode(code).get();
 
         // then
@@ -73,10 +73,10 @@ class VoucherServiceTest {
         final LocalDate validTo = LocalDate.now().plusDays(30);
         final VoucherAmountType amount = VoucherAmountType.KRW_30000;
 
-        final String code = voucherService.publishV2(validFrom, validTo, amount);
+        final String code = voucherService.publishV1(validFrom, validTo, amount);
 
         // when
-        voucherService.useVoucherV2(code);
+        voucherService.useVoucherV1(code);
         final VoucherEntity voucherEntity = voucherRepository.findByCode(code).get();
 
         // then

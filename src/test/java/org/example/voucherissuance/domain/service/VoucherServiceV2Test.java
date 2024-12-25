@@ -5,6 +5,7 @@ import org.example.voucherissuance.common.type.RequesterType;
 import org.example.voucherissuance.common.type.VoucherAmountType;
 import org.example.voucherissuance.common.type.VoucherStatusType;
 import org.example.voucherissuance.entity.voucher.VoucherEntity;
+import org.example.voucherissuance.entity.voucher.VoucherHistoryEntity;
 import org.example.voucherissuance.entity.voucher.VoucherRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -33,7 +34,7 @@ class VoucherServiceV2Test {
         final LocalDate validTo = LocalDate.now().plusDays(30);
         final VoucherAmountType amount = VoucherAmountType.KRW_30000;
 
-        final String code = voucherService.publishV2(requestContext, validFrom, validTo, amount);
+        final String code = voucherService.publishV1(requestContext, validFrom, validTo, amount);
 
         // when
         final VoucherEntity voucherEntity = voucherRepository.findByCode(code).get();
@@ -44,9 +45,18 @@ class VoucherServiceV2Test {
         assertThat(voucherEntity.getValidFrom()).isEqualTo(validFrom);
         assertThat(voucherEntity.getValidTo()).isEqualTo(validTo);
         assertThat(voucherEntity.getAmount()).isEqualTo(amount);
+
+        // history
+        final VoucherHistoryEntity voucherHistoryEntity = voucherEntity.getHistories().get(0);
+        assertThat(voucherHistoryEntity.getOrderId()).isNotNull();
+        assertThat(voucherHistoryEntity.getRequesterType()).isEqualTo(requestContext.requesterType());
+        assertThat(voucherHistoryEntity.getRequesterId()).isEqualTo(requestContext.requesterId());
+        assertThat(voucherHistoryEntity.getStatus()).isEqualTo(VoucherStatusType.PUBLISH);
+        assertThat(voucherHistoryEntity.getDescription()).isEqualTo("테스트 발행");
+
     }
 
-    @DisplayName("발행된 상품권은 사용불가 처리할 수 있다.")
+    @DisplayName("발행된 상품권은 사용 불가 처리할 수 있다.")
     @Test
     public void 상품권_사용불가(){
         // given
@@ -55,10 +65,12 @@ class VoucherServiceV2Test {
         final LocalDate validTo = LocalDate.now().plusDays(30);
         final VoucherAmountType amount = VoucherAmountType.KRW_30000;
 
-        final String code = voucherService.publishV2(requestContext, validFrom, validTo, amount);
+        final String code = voucherService.publishV1(requestContext, validFrom, validTo, amount);
+
+        final RequestContext disableRequestContext = new RequestContext(RequesterType.PARTNER, UUID.randomUUID().toString());
 
         // when
-        voucherService.disableVoucherV2(code);
+        voucherService.disableVoucherV2(requestContext, code);
         final VoucherEntity voucherEntity = voucherRepository.findByCode(code).get();
 
         // then
@@ -68,6 +80,15 @@ class VoucherServiceV2Test {
         assertThat(voucherEntity.getValidTo()).isEqualTo(validTo);
         assertThat(voucherEntity.getAmount()).isEqualTo(amount);
         assertThat(voucherEntity.getUpdateAt()).isNotEqualTo(voucherEntity.getCreateAt());
+
+        // history
+        final VoucherHistoryEntity voucherHistoryEntity = voucherEntity.getHistories().get(voucherEntity.getHistories().size()-1);
+        assertThat(voucherHistoryEntity.getOrderId()).isNotNull();
+        assertThat(voucherHistoryEntity.getRequesterType()).isEqualTo(disableRequestContext.requesterType());
+        assertThat(voucherHistoryEntity.getRequesterId()).isEqualTo(disableRequestContext.requesterId());
+        assertThat(voucherHistoryEntity.getStatus()).isEqualTo(VoucherStatusType.DISABLE);
+        assertThat(voucherHistoryEntity.getDescription()).isEqualTo("테스트 사용 불가");
+
     }
 
     @DisplayName("발행된 상품권은 사용할 수 있다.")
@@ -79,10 +100,12 @@ class VoucherServiceV2Test {
         final LocalDate validTo = LocalDate.now().plusDays(30);
         final VoucherAmountType amount = VoucherAmountType.KRW_30000;
 
-        final String code = voucherService.publishV2(requestContext, validFrom, validTo, amount);
+        final String code = voucherService.publishV1(requestContext, validFrom, validTo, amount);
+
+        final RequestContext useRequestContext = new RequestContext(RequesterType.PARTNER, UUID.randomUUID().toString());
 
         // when
-        voucherService.useVoucherV2(code);
+        voucherService.useVoucherV1(requestContext, code);
         final VoucherEntity voucherEntity = voucherRepository.findByCode(code).get();
 
         // then
@@ -92,6 +115,15 @@ class VoucherServiceV2Test {
         assertThat(voucherEntity.getValidTo()).isEqualTo(validTo);
         assertThat(voucherEntity.getAmount()).isEqualTo(amount);
         assertThat(voucherEntity.getUpdateAt()).isNotEqualTo(voucherEntity.getCreateAt());
+
+        // history
+        final VoucherHistoryEntity voucherHistoryEntity = voucherEntity.getHistories().get(voucherEntity.getHistories().size()-1);
+        assertThat(voucherHistoryEntity.getOrderId()).isNotNull();
+        assertThat(voucherHistoryEntity.getRequesterType()).isEqualTo(useRequestContext.requesterType());
+        assertThat(voucherHistoryEntity.getRequesterId()).isEqualTo(useRequestContext.requesterId());
+        assertThat(voucherHistoryEntity.getStatus()).isEqualTo(VoucherStatusType.USE);
+        assertThat(voucherHistoryEntity.getDescription()).isEqualTo("테스트 사용");
+
     }
 
 

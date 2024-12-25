@@ -45,7 +45,7 @@ public class VoucherServiceV2DynamicTest {
                     final VoucherAmountType amount = VoucherAmountType.KRW_30000;
 
                     //when
-                    final String code = voucherService.publishV2(requestContext, validFrom, validTo, amount);
+                    final String code = voucherService.publishV1(requestContext, validFrom, validTo, amount);
                     codes.add(code);
 
                     //then
@@ -73,7 +73,7 @@ public class VoucherServiceV2DynamicTest {
                     final String code = codes.get(0);
 
                     //when
-                    assertThatThrownBy(() -> voucherService.useVoucherV2(requestContext, code))
+                    assertThatThrownBy(() -> voucherService.useVoucherV1(requestContext, code))
                             .isInstanceOf(IllegalStateException.class)
                             .hasMessage("사용할 수 없는 상태의 상품권입니다.");
 
@@ -89,11 +89,11 @@ public class VoucherServiceV2DynamicTest {
                     final LocalDate validTo = LocalDate.now().plusDays(30);
                     final VoucherAmountType amount = VoucherAmountType.KRW_30000;
 
-                    final String code = voucherService.publishV2(requestContext, validFrom, validTo, amount);
+                    final String code = voucherService.publishV1(requestContext, validFrom, validTo, amount);
                     codes.add(code);
 
                     //when
-                    voucherService.useVoucherV2(requestContext, code);
+                    voucherService.useVoucherV1(requestContext, code);
 
                     //then
                     final VoucherEntity voucherEntity = voucherRepository.findByCode(code).get();
@@ -121,7 +121,7 @@ public class VoucherServiceV2DynamicTest {
                     final String code = codes.get(0);
 
                     //when
-                    assertThatThrownBy(()->voucherService.useVoucherV2(requestContext, code))
+                    assertThatThrownBy(()->voucherService.useVoucherV1(requestContext, code))
                             .isInstanceOf(IllegalStateException.class)
                             .hasMessage("사용할 수 없는 상태의 상품권입니다.");
 

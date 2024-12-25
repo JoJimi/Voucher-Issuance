@@ -40,7 +40,7 @@ public class VoucherServiceDynamicTest {
                     final VoucherAmountType amount = VoucherAmountType.KRW_30000;
 
                     //when
-                    final String code = voucherService.publishV2(validFrom, validTo, amount);
+                    final String code = voucherService.publishV1(validFrom, validTo, amount);
                     codes.add(code);
 
                     //then
@@ -53,7 +53,7 @@ public class VoucherServiceDynamicTest {
                     final String code = codes.get(0);
 
                     //when
-                    voucherService.disableVoucherV2(code);
+                    voucherService.disableVoucherV1(code);
 
                     //then
                     final VoucherEntity voucherEntity = voucherRepository.findByCode(code).get();
@@ -64,7 +64,7 @@ public class VoucherServiceDynamicTest {
                     final String code = codes.get(0);
 
                     //when
-                    assertThatThrownBy(() -> voucherService.useVoucherV2(code))
+                    assertThatThrownBy(() -> voucherService.useVoucherV1(code))
                             .isInstanceOf(IllegalStateException.class)
                             .hasMessage("사용할 수 없는 상태의 상품권입니다.");
 
@@ -78,11 +78,11 @@ public class VoucherServiceDynamicTest {
                     final LocalDate validTo = LocalDate.now().plusDays(30);
                     final VoucherAmountType amount = VoucherAmountType.KRW_30000;
 
-                    final String code = voucherService.publishV2(validFrom, validTo, amount);
+                    final String code = voucherService.publishV1(validFrom, validTo, amount);
                     codes.add(code);
 
                     //when
-                    voucherService.useVoucherV2(code);
+                    voucherService.useVoucherV1(code);
 
                     //then
                     final VoucherEntity voucherEntity = voucherRepository.findByCode(code).get();
@@ -93,7 +93,7 @@ public class VoucherServiceDynamicTest {
                     final String code = codes.get(1);
 
                     //when
-                    assertThatThrownBy(()->voucherService.disableVoucherV2(code))
+                    assertThatThrownBy(()->voucherService.disableVoucherV1(code))
                             .isInstanceOf(IllegalStateException.class)
                             .hasMessage("사용 불가 처리할 수 없는 상태의 상품권입니다.");
 
@@ -106,7 +106,7 @@ public class VoucherServiceDynamicTest {
                     final String code = codes.get(0);
 
                     //when
-                    assertThatThrownBy(()->voucherService.useVoucherV2(code))
+                    assertThatThrownBy(()->voucherService.useVoucherV1(code))
                             .isInstanceOf(IllegalStateException.class)
                             .hasMessage("사용할 수 없는 상태의 상품권입니다.");
 
