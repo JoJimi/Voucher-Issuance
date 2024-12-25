@@ -39,7 +39,7 @@ class VoucherServiceV3Test {
         final String contractCode = "CT001";
 
         // when
-        final String code = voucherService.publishV2(requestContext, validFrom, validTo, amount);
+        final String code = voucherService.publishV3(requestContext, contractCode, amount);
         final VoucherEntity voucherEntity = voucherRepository.findByCode(code).get();
 
         // then
