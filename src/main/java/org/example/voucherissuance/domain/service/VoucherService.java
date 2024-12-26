@@ -3,6 +3,8 @@ package org.example.voucherissuance.domain.service;
 import org.example.voucherissuance.common.dto.RequestContext;
 import org.example.voucherissuance.common.type.VoucherAmountType;
 import org.example.voucherissuance.common.type.VoucherStatusType;
+import org.example.voucherissuance.domain.service.validator.VoucherDisableValidator;
+import org.example.voucherissuance.domain.service.validator.VoucherPublishValidator;
 import org.example.voucherissuance.entity.voucher.*;
 import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Service;
@@ -15,11 +17,16 @@ import java.util.UUID;
 public class VoucherService {
 
     private final VoucherRepository voucherRepository;
-    private ContractRepository contractRepository;
+    private final ContractRepository contractRepository;
 
-    public VoucherService(VoucherRepository voucherRepository, ContractRepository contractRepository) {
+    private final VoucherPublishValidator voucherPublishValidator;
+    private final VoucherDisableValidator voucherDisableValidator;
+
+    public VoucherService(VoucherRepository voucherRepository, ContractRepository contractRepository, VoucherPublishValidator voucherPublishValidator, VoucherDisableValidator voucherDisableValidator) {
         this.voucherRepository = voucherRepository;
         this.contractRepository = contractRepository;
+        this.voucherPublishValidator = voucherPublishValidator;
+        this.voucherDisableValidator = voucherDisableValidator;
     }
 
     // 상품권 발행 v1
@@ -101,9 +108,7 @@ public class VoucherService {
         final ContractEntity contractEntity = contractRepository.findByCode(contractCode)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 계약입니다."));
 
-        if(contractEntity.isExpired()){
-            throw new IllegalStateException("유효기간이 지난 계약입니다.");
-        }
+        voucherPublishValidator.validate(contractEntity);
 
         final VoucherHistoryEntity voucherHistoryEntity = new VoucherHistoryEntity(orderId, requestContext.requesterType(), requestContext.requesterId(), VoucherStatusType.PUBLISH, "테스트 발행");
         final VoucherEntity voucherEntity = new VoucherEntity(code, VoucherStatusType.PUBLISH, amount, voucherHistoryEntity, contractEntity);
@@ -120,10 +125,8 @@ public class VoucherService {
         final VoucherEntity voucherEntity = voucherRepository.findByCode(code)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 상품권입니다."));
 
-        if(voucherEntity.publishHistory().getRequesterType() != requestContext.requesterType()
-                || !voucherEntity.publishHistory().getRequesterId().equals(requestContext.requesterId())){
-            throw new IllegalArgumentException("사용 불가 처리 권한이 없는 상품권입니다.");
-        }
+        voucherDisableValidator.validate(voucherEntity, requestContext);
+
 
         final VoucherHistoryEntity voucherHistoryEntity = new VoucherHistoryEntity(orderId, requestContext.requesterType(), requestContext.requesterId(), VoucherStatusType.DISABLE, "테스트 사용 불가");
 
