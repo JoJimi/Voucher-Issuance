@@ -91,7 +91,7 @@ class VoucherServiceV3Test {
         final RequestContext otherRequestContext = new RequestContext(RequesterType.USER, UUID.randomUUID().toString());
 
         // when
-        assertThatThrownBy(() -> voucherService.disableVoucherV3(requestContext, code))
+        assertThatThrownBy(() -> voucherService.disableVoucherV3(otherRequestContext, code))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("사용 불가 처리 권한이 없는 상품권입니다.");
 
