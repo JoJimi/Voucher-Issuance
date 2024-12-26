@@ -73,7 +73,7 @@ public class VoucherServiceV2DynamicTest {
                     final String code = codes.get(0);
 
                     //when
-                    assertThatThrownBy(() -> voucherService.useVoucherV1(requestContext, code))
+                    assertThatThrownBy(() -> voucherService.useVoucherV2(requestContext, code))
                             .isInstanceOf(IllegalStateException.class)
                             .hasMessage("사용할 수 없는 상태의 상품권입니다.");
 
@@ -93,7 +93,7 @@ public class VoucherServiceV2DynamicTest {
                     codes.add(code);
 
                     //when
-                    voucherService.useVoucherV1(requestContext, code);
+                    voucherService.useVoucherV2(requestContext, code);
 
                     //then
                     final VoucherEntity voucherEntity = voucherRepository.findByCode(code).get();
@@ -121,7 +121,7 @@ public class VoucherServiceV2DynamicTest {
                     final String code = codes.get(0);
 
                     //when
-                    assertThatThrownBy(()->voucherService.useVoucherV1(requestContext, code))
+                    assertThatThrownBy(()->voucherService.useVoucherV2(requestContext, code))
                             .isInstanceOf(IllegalStateException.class)
                             .hasMessage("사용할 수 없는 상태의 상품권입니다.");
 

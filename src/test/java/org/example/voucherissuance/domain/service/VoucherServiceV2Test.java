@@ -105,7 +105,7 @@ class VoucherServiceV2Test {
         final RequestContext useRequestContext = new RequestContext(RequesterType.PARTNER, UUID.randomUUID().toString());
 
         // when
-        voucherService.useVoucherV1(useRequestContext, code);
+        voucherService.useVoucherV2(useRequestContext, code);
         final VoucherEntity voucherEntity = voucherRepository.findByCode(code).get();
 
         // then

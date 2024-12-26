@@ -57,7 +57,7 @@ public class VoucherController {
     @PutMapping("/api/v2/voucher/use")
     public VoucherUseV2Response useV2(@RequestBody final VoucherUseV2Request request) {
         final String orderId = UUID.randomUUID().toString().toUpperCase().replaceAll("-", "");
-        voucherService.useVoucherV1(new RequestContext(request.requesterType(), request.requesterId()), request.code());
+        voucherService.useVoucherV2(new RequestContext(request.requesterType(), request.requesterId()), request.code());
 
         return new VoucherUseV2Response(orderId);
     }
